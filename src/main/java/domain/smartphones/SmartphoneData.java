@@ -62,4 +62,16 @@ public class SmartphoneData {
     public void setReadings(List<List<Object>> readings) {
         this.readings = readings;
     }
+
+    @Override
+    public String toString() {
+        return "SmartphoneData{" +
+                "entity_id='" + entity_id + '\'' +
+                ", attribute_id='" + attribute_id + '\'' +
+                ", function='" + function + '\'' +
+                ", from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", readings=" + readings +
+                '}';
+    }
 }

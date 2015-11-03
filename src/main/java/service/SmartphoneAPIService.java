@@ -1,8 +1,8 @@
 package service;
 
-import config.SantanderConfiguration;
 import config.SmartphoneConfiguration;
 import domain.iotsth.Response;
+import domain.smartphones.SmartphoneData;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -82,7 +82,7 @@ public class SmartphoneAPIService {
     }
 
 
-    public Response getData(String entity_id, String entity_type, String attribute_id, String start, String end, String offset, String limit) throws Exception {
+    public SmartphoneData getData(String entity_id,   String attribute_id, String start, String end, String offset, String limit, String function) throws Exception {
         RestTemplate client = new RestTemplate(new HttpComponentsClientHttpRequestFactory(HttpClientBuilder.create().build()));
         client.setErrorHandler(new CustomResponseErrorHandler());
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -97,9 +97,9 @@ public class SmartphoneAPIService {
         requestHeaders.setAccept(acceptableMediaTypes);
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
-        String url = smartphoneConfiguration.getSensorDataEndpoint() + "/" + entity_id + "readings?attribute_id=" + attribute_id;
-        url += "?dateFrom=" + start;
-        url += "&dateTo=" + end;
+        String url = smartphoneConfiguration.getSensorDataEndpoint() + "/" + entity_id + "/readings?attribute_id=" + attribute_id;
+        url += "&from=" + start;
+        url += "&to=" + end;
         if (limit != null)
             url += "&hLimit=" + limit;
         else
@@ -108,9 +108,13 @@ public class SmartphoneAPIService {
             url += "&hOffset=" + offset;
         else
             url += "&hOffset=" + 0;
+        if (function != null)
+            url += "&function=" + function;
+        else
+            url += "&function=avg";
 
         try {
-            ResponseEntity<Response> response = client.exchange(url, HttpMethod.GET, requestEntity, Response.class);
+            ResponseEntity<SmartphoneData> response = client.exchange(url, HttpMethod.GET, requestEntity, SmartphoneData.class);
             if (response.getBody().toString().contains("error")) {
                 throw new Exception(response.getBody().toString());
             }

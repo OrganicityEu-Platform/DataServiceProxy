@@ -1,8 +1,6 @@
-import config.SantanderConfiguration;
 import config.SmartphoneConfiguration;
-import domain.iotsth.Response;
+import domain.smartphones.SmartphoneData;
 import org.testng.annotations.Test;
-import service.SantanderAPIService;
 import service.SmartphoneAPIService;
 
 /**
@@ -15,14 +13,13 @@ public class SmartphoneAPITest {
     private static String password = "";
     private static String uuid = "urn:oc:entity:london:smartphone:phone:2";
     private static String sensor = "urn:oc:atributeType:soundPressureLevel:ambient";
-    private static String start = "2015-10-14T00:00:00.000Z";
-    private static String end = "2015-11-15T23:59:59.999Z";
-    String x = "{\"contextResponses\":[{\"contextElement\":{\"attributes\":[{\"name\":\"temperature\",\"values\":[{\"recvTime\":\"2015-10-29T15:21:02.000Z\",\"attrType\":\"urn:oc:attributeType:temperature:ambient\",\"attrValue\":\"40.2344,-3.87768\"},{\"recvTime\":\"2015-10-29T15:21:11.000Z\",\"attrType\":\"urn:oc:attributeType:temperature:ambient\",\"attrValue\":\"40.2344,-3.87768\"},{\"recvTime\":\"2015-10-29T15:21:21.000Z\",\"attrType\":\"urn:oc:attributeType:temperature:ambient\",\"attrValue\":\"40.2344,-3.87768\"},{\"recvTime\":\"2015-10-29T15:21:31.000Z\",\"attrType\":\"urn:oc:attributeType:temperature:ambient\",\"attrValue\":\"40.2344,-3.87768\"},{\"recvTime\":\"2015-10-29T15:21:41.000Z\",\"attrType\":\"urn:oc:attributeType:temperature:ambient\",\"attrValue\":\"40.2344,-3.87768\"},{\"recvTime\":\"2015-10-29T15:21:51.000Z\",\"attrType\":\"urn:oc:attributeType:temperature:ambient\",\"attrValue\":\"40.2344,-3.87768\"},{\"recvTime\":\"2015-10-29T15:22:01.000Z\",\"attrType\":\"urn:oc:attributeType:temperature:ambient\",\"attrValue\":\"40.2344,-3.87768\"},{\"recvTime\":\"2015-10-29T15:22:11.000Z\",\"attrType\":\"urn:oc:attributeType:temperature:ambient\",\"attrValue\":\"40.2344,-3.87768\"},{\"recvTime\":\"2015-10-29T15:22:21.000Z\",\"attrType\":\"urn:oc:attributeType:temperature:ambient\",\"attrValue\":\"40.2344,-3.87768\"},{\"recvTime\":\"2015-10-29T15:22:31.000Z\",\"attrType\":\"urn:oc:attributeType:temperature:ambient\",\"attrValue\":\"40.2344,-3.87768\"}]}],\"id\":\"urn_oc_entity_santander_environmental_t93\",\"isPattern\":false,\"type\":\"urn_oc_entityType_iotdevice\"},\"statusCode\":{\"code\":\"200\",\"reasonPhrase\":\"OK\"}}]}";
+    private static String start = "2014-10-01T00:00Z";
+    private static String end = "2015-12-02T11:57Z";
 
     @org.testng.annotations.Test
     public void testGetSensorData() throws Exception {
         SmartphoneConfiguration ac = new SmartphoneConfiguration(username, password, endpoint);
-        Response data = (new SmartphoneAPIService(ac)).getData(uuid, "urn_oc_entityType_iotdevice", sensor, start, end, "0", "10");
+        SmartphoneData data = (new SmartphoneAPIService(ac)).getData(uuid, sensor, start, end, "0", "10","avg");
             System.out.println(data.toString());
     }
 }
