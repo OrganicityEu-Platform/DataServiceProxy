@@ -20,8 +20,8 @@ public class Controller {
     @Autowired
     ModelService modelService;
 
-    @RequestMapping("api/v1/devices/{uuid}/readings")
-    public Response getData(@PathVariable(value = "uuid") String uuid, @RequestParam(value = "attribute_id") String attribute_id, @RequestParam(value = "from") String start, @RequestParam(value = "to") String end, @RequestParam(value = "function") String function, @RequestParam(value = "group", required = false) String group, @RequestParam(value = "limit") String limit, @RequestParam(value = "offset") String offset) throws Exception {
+    @RequestMapping("api/v1/entities/{uuid}/readings")
+    public Response getData(@PathVariable(value = "uuid") String uuid, @RequestParam(value = "attribute_id") String attribute_id, @RequestParam(value = "from") String start, @RequestParam(value = "to") String end, @RequestParam(value = "function", required = false) String function, @RequestParam(value = "group", required = false) String group, @RequestParam(value = "limit", required = false) String limit, @RequestParam(value = "offset", required = false) String offset) throws Exception {
         if (uuid.startsWith("urn:oc:entity:santander") == true) {
             try {
                 uuid = uuid.replace(":", "_");
@@ -32,7 +32,7 @@ public class Controller {
             }
         } else if (uuid.startsWith("urn:oc:entity:london:smartphone") == true) {
             try {
-                return modelService.getSmartCitizenResponse2(smartphoneAPIService.getData(uuid, attribute_id, start, end, null, null, function));
+                return modelService.getSmartCitizenResponse2(smartphoneAPIService.getData(uuid, attribute_id, start, end, null, null, "avg"));
             } catch (Exception e) {
                 throw e;
             }

@@ -19,11 +19,11 @@ public class ModelService {
         domain.smartcitizen.Response response = new domain.smartcitizen.Response();
         if (santanderResponse.getContextResponses().length == 0) return response;
         ContextElement element = santanderResponse.getContextResponses()[0].getContextElement();
-        response.setEntity_id(element.getId());
+        response.setEntity_id(element.getId().replace("_",":"));
         if (element.getAttributes().length == 0) {
             return response;
         }
-        response.setAttribute_id(element.getAttributes()[0].getName());
+        response.setAttribute_id(element.getAttributes()[0].getName().replace("_",":"));
         response.setFrom(from);
         response.setTo(to);
         Value[] values = element.getAttributes()[0].getValues();
