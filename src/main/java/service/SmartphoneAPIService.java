@@ -82,7 +82,7 @@ public class SmartphoneAPIService {
     }
 
 
-    public SmartphoneData getData(String entity_id,   String attribute_id, String start, String end, String offset, String limit, String function) throws Exception {
+    public SmartphoneData getData(String entity_id, String attribute_id, String start, String end, String rollup, String function, String offset, String limit) throws Exception {
         RestTemplate client = new RestTemplate(new HttpComponentsClientHttpRequestFactory(HttpClientBuilder.create().build()));
         client.setErrorHandler(new CustomResponseErrorHandler());
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -112,6 +112,9 @@ public class SmartphoneAPIService {
             url += "&function=" + function;
         else
             url += "&function=avg";
+        if (rollup != null)
+            url += "&rollup=" + rollup;
+
 
         try {
             ResponseEntity<SmartphoneData> response = client.exchange(url, HttpMethod.GET, requestEntity, SmartphoneData.class);

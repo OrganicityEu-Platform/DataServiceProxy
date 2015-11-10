@@ -48,7 +48,8 @@ public class Controller {
             }
         } else if (uuid.startsWith("urn:oc:entity:london:smartphone") == true) {
             try {
-                return modelService.getSmartCitizenResponse2(smartphoneAPIService.getData(uuid, attribute_id, start, end, null, null, "avg"));
+
+                return modelService.getSmartCitizenResponse2(smartphoneAPIService.getData(uuid, attribute_id, start, end, rollup, function, offset, limit), start, end, function, rollup);
             } catch (Exception e) {
                 throw e;
             }

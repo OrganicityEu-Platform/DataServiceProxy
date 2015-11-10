@@ -59,13 +59,14 @@ public class ModelService {
         return response;
     }
 
-    public domain.smartcitizen.Response getSmartCitizenResponse2(SmartphoneData smartphoneResponse) throws Exception {
+    public domain.smartcitizen.Response getSmartCitizenResponse2(SmartphoneData smartphoneResponse, String from, String to, String function, String rollup) throws Exception {
         domain.smartcitizen.Response response = new domain.smartcitizen.Response();
         response.setEntity_id(smartphoneResponse.getEntity_id());
         response.setAttribute_id(smartphoneResponse.getAttribute_id());
-        response.setFrom(smartphoneResponse.getFrom());
-        response.setTo(smartphoneResponse.getTo());
-        response.setFrom(smartphoneResponse.getFrom());
+        response.setFrom(from);
+        response.setTo(to);
+        response.setFunction(function);
+        response.setRollup(rollup);
         List<List<Object>> values = smartphoneResponse.getReadings();
         Reading[] readings = new Reading[values.size()];
         int i = 0;
