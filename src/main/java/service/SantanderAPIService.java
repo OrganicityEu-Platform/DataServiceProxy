@@ -110,13 +110,17 @@ public class SantanderAPIService {
         url += "?dateFrom=" + start;
         url += "&dateTo=" + end;
 
-        if (aggregationPeriod != null) {
-            url += "&aggrPeriod=" + aggregationPeriod;
-        }
-        if (func != null)
-            url += "&aggrMethod=" + func;
 
-        if (aggregationPeriod == null) {
+        if (aggregationPeriod != null) {
+            if (aggregationPeriod.endsWith("m")) {
+                aggregationPeriod = "minute";
+            } else if (aggregationPeriod.endsWith("h")) {
+                aggregationPeriod = "hour";
+            } else if (aggregationPeriod.endsWith("d")) {
+                aggregationPeriod = "day";
+            }
+            func = "sum";
+        } else {
             if (limit != null)
                 url += "&hLimit=" + limit;
             else
@@ -126,6 +130,12 @@ public class SantanderAPIService {
             else
                 url += "&hOffset=" + 0;
         }
+
+        if (aggregationPeriod != null) {
+            url += "&aggrPeriod=" + aggregationPeriod;
+        }
+        if (func != null)
+            url += "&aggrMethod=" + func;
 
 
         try {

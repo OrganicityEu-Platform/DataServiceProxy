@@ -31,17 +31,6 @@ public class Controller {
             try {
                 uuid = uuid.replace(":", "_");
                 attribute_id = attribute_id.replace(":", "_");
-                if (rollup != null) {
-                    if (rollup.endsWith("m")) {
-                        rollup = "minute";
-                    } else if (rollup.endsWith("h")) {
-                        rollup = "hour";
-                    } else if (rollup.endsWith("d")) {
-                        rollup = "day";
-                    }
-                    function="sum";
-                }
-                if (function!=null && function.equals("avg")) function = "sum";
                 return modelService.getSmartCitizenResponse(santanderAPIService.getData(uuid, "urn_oc_entityType_iotdevice", attribute_id, start, end, rollup, function, offset, limit), start, end, function,rollup);
             } catch (Exception e) {
                 throw e;
