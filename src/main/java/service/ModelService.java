@@ -1,38 +1,61 @@
 package service;
 
 import domain.iotsth.ContextElement;
+import domain.iotsth.Point;
 import domain.iotsth.Response;
 import domain.iotsth.Value;
 import domain.smartcitizen.Reading;
 import domain.smartphones.SmartphoneData;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class ModelService {
+    TimeZone tz = TimeZone.getTimeZone("UTC");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
     public ModelService() {
+        df.setTimeZone(tz);
     }
 
-    public domain.smartcitizen.Response getSmartCitizenResponse(Response santanderResponse, String from, String to, String function) throws Exception {
+    public domain.smartcitizen.Response getSmartCitizenResponse(Response santanderResponse, String from, String to, String function, String rollup) throws Exception {
         domain.smartcitizen.Response response = new domain.smartcitizen.Response();
         if (santanderResponse.getContextResponses().length == 0) return response;
         ContextElement element = santanderResponse.getContextResponses()[0].getContextElement();
-        response.setEntity_id(element.getId().replace("_",":"));
+        response.setEntity_id(element.getId().replace("_", ":"));
         if (element.getAttributes().length == 0) {
             return response;
         }
-        response.setAttribute_id(element.getAttributes()[0].getName().replace("_",":"));
+        response.setAttribute_id(element.getAttributes()[0].getName().replace("_", ":"));
         response.setFrom(from);
         response.setTo(to);
+        response.setFunction(function);
+        response.setRollup(rollup);
         Value[] values = element.getAttributes()[0].getValues();
-        Reading[] readings = new Reading[element.getAttributes()[0].getValues().length];
+
+        List<Reading> readings= new ArrayList<Reading>();
         int i = 0;
         for (Value v : values) {
-            readings[i++] = new Reading(v.getRecvTime(), v.getAttrValue());
+            if (v.getPoints() != null && v.getPoints().length > 0) {
+                String origin = v.get_id().getOrigin();
+                 for (Point p : v.getPoints()) {
+                    readings.add(new Reading(origin, p.getValue()));
+                    break;
+                }
+            } else {
+                readings.add(new Reading(v.getRecvTime(), v.getAttrValue()));
+            }
         }
-        response.setReadings(readings);
+        Collections.sort(readings);
+        Reading[] rA=new Reading[readings.size()];
+        i=0;
+        for(Reading r:readings){
+            rA[i++]=r;
+        }
+        response.setReadings(rA );
         return response;
     }
 

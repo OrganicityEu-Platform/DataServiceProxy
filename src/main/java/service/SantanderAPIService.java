@@ -87,7 +87,7 @@ public class SantanderAPIService {
     }
 
 
-    public Response getData(String entity_id, String entity_type, String attribute_id, String start, String end, String offset, String limit) throws Exception {
+    public Response getData(String entity_id, String entity_type, String attribute_id, String start, String end, String aggregationPeriod, String func, String offset, String limit) throws Exception {
         RestTemplate client = new RestTemplate(new HttpComponentsClientHttpRequestFactory(HttpClientBuilder.create().build()));
         client.setErrorHandler(new CustomResponseErrorHandler());
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -109,14 +109,24 @@ public class SantanderAPIService {
         String url = santanderConfiguration.getSensorDataEndpoint() + "/" + entity_type + "/id/" + entity_id + "/attributes/" + attribute_id;
         url += "?dateFrom=" + start;
         url += "&dateTo=" + end;
-        if (limit != null)
-            url += "&hLimit=" + limit;
-        else
-            url += "&hLimit=" + 1000;
-        if (offset != null)
-            url += "&hOffset=" + offset;
-        else
-            url += "&hOffset=" + 0;
+
+        if (aggregationPeriod != null) {
+            url += "&aggrPeriod=" + aggregationPeriod;
+        }
+        if (func != null)
+            url += "&aggrMethod=" + func;
+
+        if (aggregationPeriod == null) {
+            if (limit != null)
+                url += "&hLimit=" + limit;
+            else
+                url += "&hLimit=" + 1000;
+            if (offset != null)
+                url += "&hOffset=" + offset;
+            else
+                url += "&hOffset=" + 0;
+        }
+
 
         try {
             ResponseEntity<Response> response = client.exchange(url, HttpMethod.GET, requestEntity, Response.class);

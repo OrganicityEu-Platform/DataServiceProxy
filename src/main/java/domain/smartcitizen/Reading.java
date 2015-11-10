@@ -1,11 +1,12 @@
 package domain.smartcitizen;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 /**
  * Created by etheodor on 28/08/2015.
  */
-public class Reading {
+public class Reading   implements Comparable<Reading>{
 
     String datetime;
     String value;
@@ -33,9 +34,21 @@ public class Reading {
 
     @Override
     public String toString() {
+
         return "Reading{" +
                 "datetime='" + datetime + '\'' +
                 ", value='" + value + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Reading that) {
+        Calendar thisT = javax.xml.bind.DatatypeConverter.parseDateTime(this.datetime);
+        Calendar thatT = javax.xml.bind.DatatypeConverter.parseDateTime(that.getDatetime());
+        if (thisT.before(thatT)){
+            return -1;
+        }else{
+            return 1;
+        }
     }
 }

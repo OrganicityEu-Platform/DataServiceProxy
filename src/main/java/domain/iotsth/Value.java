@@ -2,6 +2,8 @@ package domain.iotsth;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Arrays;
+
 /**
  * Created by etheodor on 03/11/2015.
  */
@@ -10,6 +12,8 @@ public class Value {
     String recvTime;
     String attrType;
     String attrValue;
+    ValueId _id;
+    Point[] points;
 
     public Value() {
     }
@@ -44,6 +48,21 @@ public class Value {
         this.attrValue = attrValue;
     }
 
+    public ValueId get_id() {
+        return _id;
+    }
+
+    public void set_id(ValueId _id) {
+        this._id = _id;
+    }
+
+    public Point[] getPoints() {
+        return points;
+    }
+
+    public void setPoints(Point[] points) {
+        this.points = points;
+    }
 
     @Override
     public String toString() {
@@ -51,6 +70,8 @@ public class Value {
                 "recvTime='" + recvTime + '\'' +
                 ", attrType='" + attrType + '\'' +
                 ", attrValue='" + attrValue + '\'' +
+                ", points=" + ((points !=null)? Arrays.toString(points) : "") +
+                ", _id=" +((_id !=null) ?_id.toString():"") +
                 '}';
     }
 }

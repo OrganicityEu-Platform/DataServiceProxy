@@ -12,18 +12,13 @@ public class Response {
     String from;
     String to;
     String function;
+    String rollup;
     Reading[] readings;
 
     public Response() {
     }
 
-    public Response(String entity_id, String attribute_id, String from, String to, String function ) {
-        this.entity_id = entity_id;
-        this.attribute_id = attribute_id;
-        this.from = from;
-        this.to = to;
-        this.function = function;
-     }
+
 
     public String getFunction() {
         return function;
@@ -73,6 +68,23 @@ public class Response {
         this.readings = readings;
     }
 
+    public Response(String entity_id, String attribute_id, String from, String to, String function, String rollup, Reading[] readings) {
+        this.entity_id = entity_id;
+        this.attribute_id = attribute_id;
+        this.from = from;
+        this.to = to;
+        this.function = function;
+        this.rollup = rollup;
+        this.readings = readings;
+    }
+
+    public String getRollup() {
+        return rollup;
+    }
+
+    public void setRollup(String rollup) {
+        this.rollup = rollup;
+    }
 
     @Override
     public String toString() {
@@ -81,6 +93,8 @@ public class Response {
                 ", attribute_id='" + attribute_id + '\'' +
                 ", from='" + from + '\'' +
                 ", to='" + to + '\'' +
+                ", function='" + function + '\'' +
+                ", rollup='" + rollup + '\'' +
                 ", readings=" + Arrays.toString(readings) +
                 '}';
     }

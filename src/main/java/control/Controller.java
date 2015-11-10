@@ -21,12 +21,28 @@ public class Controller {
     ModelService modelService;
 
     @RequestMapping("api/v1/entities/{uuid}/readings")
-    public Response getData(@PathVariable(value = "uuid") String uuid, @RequestParam(value = "attribute_id") String attribute_id, @RequestParam(value = "from") String start, @RequestParam(value = "to") String end, @RequestParam(value = "function", required = false) String function, @RequestParam(value = "group", required = false) String group, @RequestParam(value = "limit", required = false) String limit, @RequestParam(value = "offset", required = false) String offset) throws Exception {
+    public Response getData(@PathVariable(value = "uuid") String uuid, @RequestParam(value = "attribute_id") String attribute_id,
+                            @RequestParam(value = "from") String start, @RequestParam(value = "to") String end,
+                            @RequestParam(value = "function", required = false) String function,
+                            @RequestParam(value = "rollup", required = false) String rollup, //m, h , d
+                            @RequestParam(value = "limit", required = false) String limit,
+                            @RequestParam(value = "offset", required = false) String offset) throws Exception {
         if (uuid.startsWith("urn:oc:entity:santander") == true) {
             try {
                 uuid = uuid.replace(":", "_");
                 attribute_id = attribute_id.replace(":", "_");
-                return modelService.getSmartCitizenResponse(santanderAPIService.getData(uuid, "urn_oc_entityType_iotdevice", attribute_id, start, end, null, null), start, end, "");
+                if (rollup != null) {
+                    if (rollup.endsWith("m")) {
+                        rollup = "minute";
+                    } else if (rollup.endsWith("h")) {
+                        rollup = "hour";
+                    } else if (rollup.endsWith("d")) {
+                        rollup = "day";
+                    }
+                    function="sum";
+                }
+                if (function!=null && function.equals("avg")) function = "sum";
+                return modelService.getSmartCitizenResponse(santanderAPIService.getData(uuid, "urn_oc_entityType_iotdevice", attribute_id, start, end, rollup, function, offset, limit), start, end, function,rollup);
             } catch (Exception e) {
                 throw e;
             }
