@@ -46,7 +46,7 @@ public class Controller {
             } catch (Exception e) {
                 throw e;
             }
-        }else if (uuid.startsWith("urn:oc:entity:london:environmental") == true) {
+        }else if (uuid.startsWith("urn:oc:entity:london:environmental:fixed") == true) {
             try {
 
                 return londonAPIService.getData(uuid, attribute_id, start, end, rollup, function, offset, limit);
