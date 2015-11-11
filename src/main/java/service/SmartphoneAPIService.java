@@ -101,13 +101,13 @@ public class SmartphoneAPIService {
         url += "&from=" + start;
         url += "&to=" + end;
         if (limit != null)
-            url += "&hLimit=" + limit;
+            url += "&limit=" + limit;
         else
-            url += "&hLimit=" + 1000;
+            url += "&limit=" + 1000;
         if (offset != null)
-            url += "&hOffset=" + offset;
+            url += "&offset=" + offset;
         else
-            url += "&hOffset=" + 0;
+            url += "&offset=" + 0;
         if (function != null)
             url += "&function=" + function;
         else

@@ -11,6 +11,9 @@ public class Reading   implements Comparable<Reading>{
     String datetime;
     String value;
 
+    public Reading() {
+    }
+
     public Reading(String datetime, String value) {
         this.datetime = datetime;
         this.value = value;

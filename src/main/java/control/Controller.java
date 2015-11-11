@@ -3,6 +3,7 @@ package control;
 import domain.smartcitizen.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import service.LondonAPIService;
 import service.ModelService;
 import service.SantanderAPIService;
 import service.SmartphoneAPIService;
@@ -16,6 +17,9 @@ public class Controller {
 
     @Autowired
     SmartphoneAPIService smartphoneAPIService;
+
+    @Autowired
+    LondonAPIService londonAPIService;
 
     @Autowired
     ModelService modelService;
@@ -39,6 +43,13 @@ public class Controller {
             try {
 
                 return modelService.getSmartCitizenResponse2(smartphoneAPIService.getData(uuid, attribute_id, start, end, rollup, function, offset, limit), start, end, function, rollup);
+            } catch (Exception e) {
+                throw e;
+            }
+        }else if (uuid.startsWith("urn:oc:entity:london:environmental") == true) {
+            try {
+
+                return londonAPIService.getData(uuid, attribute_id, start, end, rollup, function, offset, limit);
             } catch (Exception e) {
                 throw e;
             }
