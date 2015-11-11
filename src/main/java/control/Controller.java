@@ -30,7 +30,7 @@ public class Controller {
         if (uuid.startsWith("urn:oc:entity:santander") == true) {
             try {
                 uuid = uuid.replace(":", "_");
-                attribute_id = attribute_id.replace(":", "_");
+                //attribute_id = attribute_id.replace(":", "_");
                 return modelService.getSmartCitizenResponse(santanderAPIService.getData(uuid, "urn_oc_entityType_iotdevice", attribute_id, start, end, rollup, function, offset, limit), start, end, function,rollup);
             } catch (Exception e) {
                 throw e;

@@ -36,12 +36,12 @@ public class ModelService {
         response.setRollup(rollup);
         Value[] values = element.getAttributes()[0].getValues();
 
-        List<Reading> readings= new ArrayList<Reading>();
+        List<Reading> readings = new ArrayList<Reading>();
         int i = 0;
         for (Value v : values) {
             if (v.getPoints() != null && v.getPoints().length > 0) {
                 String origin = v.get_id().getOrigin();
-                 for (Point p : v.getPoints()) {
+                for (Point p : v.getPoints()) {
                     readings.add(new Reading(origin, p.getValue()));
                     break;
                 }
@@ -50,12 +50,12 @@ public class ModelService {
             }
         }
         Collections.sort(readings);
-        Reading[] rA=new Reading[readings.size()];
-        i=0;
-        for(Reading r:readings){
-            rA[i++]=r;
+        Reading[] rA = new Reading[readings.size()];
+        i = 0;
+        for (Reading r : readings) {
+            rA[i++] = r;
         }
-        response.setReadings(rA );
+        response.setReadings(rA);
         return response;
     }
 

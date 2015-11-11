@@ -101,8 +101,8 @@ public class SantanderAPIService {
         acceptableMediaTypes.add(MediaType.ALL);
         requestHeaders.setAccept(acceptableMediaTypes);
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        requestHeaders.set("Fiware-Service", "ocservice");
-        requestHeaders.set("Fiware-ServicePath", "/ocservice_servpath");
+        requestHeaders.set("Fiware-Service", "organicity");
+        requestHeaders.set("Fiware-ServicePath", "/hist");
         HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
 
 
