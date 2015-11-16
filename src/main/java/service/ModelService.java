@@ -9,6 +9,7 @@ import domain.smartphones.SmartphoneData;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -26,6 +27,7 @@ public class ModelService {
         if (santanderResponse.getContextResponses().length == 0) return response;
         ContextElement element = santanderResponse.getContextResponses()[0].getContextElement();
         response.setEntity_id(element.getId().replace("_", ":"));
+
         if (element.getAttributes().length == 0) {
             return response;
         }
@@ -37,13 +39,17 @@ public class ModelService {
         Value[] values = element.getAttributes()[0].getValues();
 
         List<Reading> readings = new ArrayList<Reading>();
-        int i = 0;
+
         for (Value v : values) {
+
             if (v.getPoints() != null && v.getPoints().length > 0) {
                 String origin = v.get_id().getOrigin();
+                int i = 0;
                 for (Point p : v.getPoints()) {
-                    readings.add(new Reading(origin, p.getValue()));
-                    break;
+                    String datetime = datetimeFixingFromOrigin(origin, i, rollup);
+                    readings.add(new Reading(datetime, p.getValue()));
+                    i++;
+                    //break; //todo remove this
                 }
             } else {
                 readings.add(new Reading(v.getRecvTime(), v.getAttrValue()));
@@ -51,13 +57,30 @@ public class ModelService {
         }
         Collections.sort(readings);
         Reading[] rA = new Reading[readings.size()];
-        i = 0;
+        int i = 0;
         for (Reading r : readings) {
             rA[i++] = r;
         }
         response.setReadings(rA);
         return response;
     }
+
+
+    private String datetimeFixingFromOrigin(String origin, int iter, String rollup) throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        Date d = df.parse(origin);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        if (rollup.endsWith("m")) {
+            cal.add(Calendar.MINUTE, iter);
+        } else if (rollup.endsWith("h")) {
+            cal.add(Calendar.HOUR, iter);
+        } else if (rollup.endsWith("d")) {
+            cal.add(Calendar.DATE, iter);
+        }
+        return df.format(cal.getTime());
+    }
+
 
     public domain.smartcitizen.Response getSmartCitizenResponse2(SmartphoneData smartphoneResponse, String from, String to, String function, String rollup) throws Exception {
         domain.smartcitizen.Response response = new domain.smartcitizen.Response();
