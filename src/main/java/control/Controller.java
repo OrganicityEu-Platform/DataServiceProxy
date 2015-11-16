@@ -35,7 +35,10 @@ public class Controller {
             try {
                 uuid = uuid.replace(":", "_");
                 //attribute_id = attribute_id.replace(":", "_");
-                return modelService.getSmartCitizenResponse(santanderAPIService.getData(uuid, "urn_oc_entityType_iotdevice", attribute_id, start, end, rollup, function, offset, limit), start, end, function,rollup);
+                if (attribute_id.startsWith("urn:oc:attributeType:") == false) {
+                    attribute_id = "urn:oc:attributeType:" + attribute_id;
+                }
+                return modelService.getSmartCitizenResponse(santanderAPIService.getData(uuid, "urn_oc_entityType_iotdevice", attribute_id, start, end, rollup, function, offset, limit), start, end, function, rollup);
             } catch (Exception e) {
                 throw e;
             }
@@ -45,7 +48,7 @@ public class Controller {
             } catch (Exception e) {
                 throw e;
             }
-        }else if (uuid.startsWith("urn:oc:entity:london:") == true) {
+        } else if (uuid.startsWith("urn:oc:entity:london:") == true) {
             try {
 
                 return londonAPIService.getData(uuid, attribute_id, start, end, rollup, function, offset, limit);
