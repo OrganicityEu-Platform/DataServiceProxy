@@ -44,7 +44,11 @@ public class Controller {
                     if (attribute_id.startsWith("urn:oc:attributeType:") == true) {
                         attribute_id = attribute_id.replace("urn:oc:attributeType:", "");
                     }
-                    r = modelService.getSmartCitizenResponse(santanderAPIService.getData(uuid, "urn_oc_entityType_iotdevice", attribute_id, start, end, rollup, function, offset, limit), start, end, function, rollup);
+                    if (attribute_id.contains("bike")) {
+                        r = modelService.getSmartCitizenResponse(santanderAPIService.getData(uuid, "urn_oc_entityType_bikeStation", attribute_id, start, end, rollup, function, offset, limit), start, end, function, rollup);
+                    } else {
+                        r = modelService.getSmartCitizenResponse(santanderAPIService.getData(uuid, "urn_oc_entityType_iotdevice", attribute_id, start, end, rollup, function, offset, limit), start, end, function, rollup);
+                    }
                 } catch (Exception e) {
                     throw e;
                 }
