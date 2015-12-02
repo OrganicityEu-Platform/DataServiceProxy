@@ -4,10 +4,7 @@ import domain.smartcitizen.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import service.LondonAPIService;
-import service.ModelService;
-import service.SantanderAPIService;
-import service.SmartphoneAPIService;
+import service.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,6 +17,9 @@ public class Controller {
 
     @Autowired
     SmartphoneAPIService smartphoneAPIService;
+
+    @Autowired
+    PatraAPIService patraAPIService;
 
     @Autowired
     LondonAPIService londonAPIService;
@@ -55,6 +55,18 @@ public class Controller {
             } else if (uuid.startsWith("urn:oc:entity:london:smartphone") == true) {
                 try {
                     r = modelService.getSmartCitizenResponse2(smartphoneAPIService.getData(uuid, attribute_id, start, end, rollup, function, offset, limit), start, end, function, rollup);
+                } catch (Exception e) {
+                    throw e;
+                }
+            } else if (uuid.startsWith("urn:oc:entity:patra:smartphone") == true) {
+                try {
+                    r = modelService.getSmartCitizenResponse2(smartphoneAPIService.getData(uuid, attribute_id, start, end, rollup, function, offset, limit), start, end, function, rollup);
+                } catch (Exception e) {
+                    throw e;
+                }
+            }  else if (uuid.startsWith("urn:oc:entity:patra") == true) {
+                try {
+                    r = modelService.getSmartCitizenResponse2(patraAPIService.getData(uuid, attribute_id, start, end, rollup, function, offset, limit), start, end, function, rollup);
                 } catch (Exception e) {
                     throw e;
                 }
