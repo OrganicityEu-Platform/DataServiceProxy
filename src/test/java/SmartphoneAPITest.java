@@ -20,9 +20,9 @@ public class SmartphoneAPITest {
     @org.testng.annotations.Test
     public void testGetSensorData() throws Exception {
         SmartphoneConfiguration ac = new SmartphoneConfiguration(username, password, endpoint);
-        SmartphoneData data = (new SmartphoneAPIService(ac)).getData(uuid, sensor, start, end, "0", "10","avg");
-        System.out.println(data.toString());
-        domain.smartcitizen.Response r=(new ModelService()).getSmartCitizenResponse2(data);
-        System.out.println(r.toString());
+      //  SmartphoneData data = (new SmartphoneAPIService(ac)).getData(uuid, sensor, start, end, "0", "10","avg");
+        //System.out.println(data.toString());
+       // domain.smartcitizen.Response r=(new ModelService()).getSmartCitizenResponse2(data);
+        //System.out.println(r.toString());
     }
 }

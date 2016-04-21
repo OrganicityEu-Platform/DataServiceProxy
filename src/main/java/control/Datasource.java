@@ -9,7 +9,7 @@ import service.*;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-public class Controller {
+public class Datasource {
 
 
     @Autowired
@@ -27,8 +27,8 @@ public class Controller {
     @Autowired
     ModelService modelService;
 
-    @RequestMapping("api/v1/entities/{uuid}/readings")
-    public Response getData(@PathVariable(value = "uuid") String uuid, @RequestParam(value = "attribute_id") String attribute_id,
+    @RequestMapping(value="api/v1/entities/{uuid}/readings", method = RequestMethod.GET)
+    public Response datasource(@PathVariable(value = "uuid") String uuid, @RequestParam(value = "attribute_id") String attribute_id,
                             @RequestParam(value = "from") String start, @RequestParam(value = "to") String end,
                             @RequestParam(value = "function", required = false) String function,
                             @RequestParam(value = "rollup", required = false) String rollup, //m, h , d
@@ -64,7 +64,7 @@ public class Controller {
                 } catch (Exception e) {
                     throw e;
                 }
-            }  else if (uuid.startsWith("urn:oc:entity:patra") == true) {
+            } else if (uuid.startsWith("urn:oc:entity:patra") == true) {
                 try {
                     r = modelService.getSmartCitizenResponse2(patraAPIService.getData(uuid, attribute_id, start, end, rollup, function, offset, limit), start, end, function, rollup);
                 } catch (Exception e) {
