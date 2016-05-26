@@ -29,6 +29,7 @@ targetCompatibility = 1.8
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb")
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-jetty:1.2.5.RELEASE")
     compile("org.springframework.boot:spring-boot-starter-jersey")
@@ -38,7 +39,9 @@ dependencies {
     compile('io.springfox:springfox-swagger2:2.4.0')
     compile('io.springfox:springfox-swagger-ui:2.4.0')
     testCompile('org.testng:testng:6.9.6')
-
+    compile('org.springframework:spring-context:4.1.4.RELEASE')
+    compile('org.springframework:spring-context-support:4.1.4.RELEASE')
+    compile('net.sf.ehcache:ehcache-core:2.6.10')
 }
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'

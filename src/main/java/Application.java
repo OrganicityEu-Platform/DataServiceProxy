@@ -3,12 +3,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
@@ -20,8 +23,8 @@ import java.util.Arrays;
 import static springfox.documentation.builders.PathSelectors.regex;
 
 @EnableAutoConfiguration
-@Configuration
-@ComponentScan({"service", "config", "control", "tasks"})
+@EnableMongoRepositories
+@ComponentScan({"service", "config", "control"})
 @SpringBootApplication
 @EnableScheduling
 @EnableSwagger2
@@ -40,7 +43,7 @@ public class Application {
     }
 
     @Bean
-    public Docket petApi() {
+    public Docket datasourceApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("Datasource-API")
                 .apiInfo(apiInfo())
@@ -57,5 +60,16 @@ public class Application {
                 .version("0.1").build();
     }
 
+    @Bean
+    public EhCacheManagerFactoryBean ehCacheCacheManager() {
+        EhCacheManagerFactoryBean cmfb = new EhCacheManagerFactoryBean();
+        cmfb.setConfigLocation(new ClassPathResource("ehcache3.xml"));
+        cmfb.setShared(true);
+        return cmfb;
+    }
 
+    @Bean
+    public CacheManager cacheManager() {
+        return new EhCacheCacheManager(ehCacheCacheManager().getObject());
+    }
 }

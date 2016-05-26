@@ -1,12 +1,19 @@
 package control;
 
+import domain.ApiLogEntry;
 import domain.smartcitizen.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import service.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 @RestController
 public class Datasource {
@@ -27,14 +34,33 @@ public class Datasource {
     @Autowired
     ModelService modelService;
 
-    @RequestMapping(value="api/v1/entities/{uuid}/readings", method = RequestMethod.GET)
+    @Autowired
+    ApiLogRepository apiLogRepository;
+
+    @Cacheable(value = "entitiesCache", key = "{ #uuid,#attribute_id, #from, #to, #function, #rollup, #limit, #offset }")
+    @RequestMapping(value = "api/v1/entities/{uuid}/readings", method = RequestMethod.GET)
     public Response datasource(@PathVariable(value = "uuid") String uuid, @RequestParam(value = "attribute_id") String attribute_id,
-                            @RequestParam(value = "from") String start, @RequestParam(value = "to") String end,
-                            @RequestParam(value = "function", required = false) String function,
-                            @RequestParam(value = "rollup", required = false) String rollup, //m, h , d
-                            @RequestParam(value = "limit", required = false) String limit,
-                            @RequestParam(value = "offset", required = false) String offset,
-                            HttpServletResponse response) throws Exception {
+                               @RequestParam(value = "from") String start, @RequestParam(value = "to") String end,
+                               @RequestParam(value = "function", required = false) String function,
+                               @RequestParam(value = "rollup", required = false) String rollup, //m, h , d
+                               @RequestParam(value = "limit", required = false) String limit,
+                               @RequestParam(value = "offset", required = false) String offset,
+                               HttpServletResponse response,
+                               HttpServletRequest request) throws Exception {
+
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
+        df.setTimeZone(tz);
+        ApiLogEntry ale = new ApiLogEntry();
+        ale.setTimestamp(df.format(new Date()));
+        ale.setSession(request.getSession().getId());
+        ale.setService("datasource");
+        ale.setMethod("entities");
+        ale.setIp(request.getRemoteAddr());
+        ale.setAsset(uuid);
+        ale.setAttribute(attribute_id);
+
+        apiLogRepository.save(ale);
         Response r = null;
         try {
             if (uuid.startsWith("urn:oc:entity:santander") == true) {
