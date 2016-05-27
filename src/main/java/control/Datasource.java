@@ -37,7 +37,16 @@ public class Datasource {
     @Autowired
     ApiLogRepository apiLogRepository;
 
-    @Cacheable(value = "entitiesCache", key = "{ #uuid,#attribute_id, #from, #to, #function, #rollup, #limit, #offset }")
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public Response datasource(
+                               HttpServletResponse response) throws Exception {
+        response.setStatus(HttpStatus.ACCEPTED.value());
+        return null;
+    }
+
+
+        @Cacheable(value = "entitiesCache", key = "{ #uuid,#attribute_id, #from, #to, #function, #rollup, #limit, #offset }")
     @RequestMapping(value = "api/v1/entities/{uuid}/readings", method = RequestMethod.GET)
     public Response datasource(@PathVariable(value = "uuid") String uuid, @RequestParam(value = "attribute_id") String attribute_id,
                                @RequestParam(value = "from") String start, @RequestParam(value = "to") String end,
