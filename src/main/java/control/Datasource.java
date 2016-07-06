@@ -2,6 +2,8 @@ package control;
 
 import domain.ApiLogEntry;
 import domain.smartcitizen.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
@@ -18,7 +20,7 @@ import java.util.TimeZone;
 @RestController
 public class Datasource {
 
-
+    final static Logger logger = LoggerFactory.getLogger("Datasource");
     @Autowired
     SantanderAPIService santanderAPIService;
 
@@ -40,13 +42,13 @@ public class Datasource {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public Response datasource(
-                               HttpServletResponse response) throws Exception {
+            HttpServletResponse response) throws Exception {
         response.setStatus(HttpStatus.ACCEPTED.value());
         return null;
     }
 
 
-        @Cacheable(value = "entitiesCache", key = "{ #uuid,#attribute_id, #from, #to, #function, #rollup, #limit, #offset }")
+    @Cacheable(value = "entitiesCache", key = "{ #uuid,#attribute_id, #from, #to, #function, #rollup, #limit, #offset }")
     @RequestMapping(value = "api/v1/entities/{uuid}/readings", method = RequestMethod.GET)
     public Response datasource(@PathVariable(value = "uuid") String uuid, @RequestParam(value = "attribute_id") String attribute_id,
                                @RequestParam(value = "from") String start, @RequestParam(value = "to") String end,
@@ -56,6 +58,16 @@ public class Datasource {
                                @RequestParam(value = "offset", required = false) String offset,
                                HttpServletResponse response,
                                HttpServletRequest request) throws Exception {
+
+        logger.info("uuid:" + uuid);
+        logger.info("attribute_id:" + attribute_id);
+        logger.info("from:" + start);
+        logger.info("to:" + end);
+        logger.info("function:" + uuid);
+        logger.info("rollup:" + rollup);
+        logger.info("limit:" + limit);
+        logger.info("offset:" + offset);
+
 
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
@@ -121,6 +133,7 @@ public class Datasource {
             response.sendError(HttpStatus.BAD_REQUEST.value());
             return null;
         }
+        logger.info("result:" + r.toString());
         return r;
     }
 
