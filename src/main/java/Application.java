@@ -12,6 +12,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
@@ -71,5 +74,15 @@ public class Application {
     @Bean
     public CacheManager cacheManager() {
         return new EhCacheCacheManager(ehCacheCacheManager().getObject());
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**").allowedOrigins("http://observatory.organicity.eu/");
+            }
+        };
     }
 }
