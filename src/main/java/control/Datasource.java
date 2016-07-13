@@ -47,7 +47,7 @@ public class Datasource {
         return null;
     }
 
-
+    @CrossOrigin(origins = "http://observatory.organicity.eu/")
     @Cacheable(value = "entitiesCache", key = "{ #uuid,#attribute_id, #from, #to, #function, #rollup, #limit, #offset }")
     @RequestMapping(value = "api/v1/entities/{uuid}/readings", method = RequestMethod.GET)
     public Response datasource(@PathVariable(value = "uuid") String uuid, @RequestParam(value = "attribute_id") String attribute_id,
